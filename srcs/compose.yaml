@@ -1,6 +1,47 @@
 services:
-  nginx:
-    build: ./requirements/nginx
+  mariadb:
+    image: mariadb
+    volumes:
+      - db_vol:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MARIADB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_root_password
+      - db_password
+
+  wordpress:
+    image: wordpress
     ports:
-      - 8080:80
-        #      - 443:80
+      - 4443:443
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    
+  #  nginx:
+  #  build: ./requirements/nginx
+  #  networks:
+  #    - inception_net
+  #  ports:
+  #    - 8080:80
+  #    - 443:80
+
+networks:
+  inception_net:
+    driver: bridge
+
+volumes:
+  db_vol:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${VOLUME_PATH}/database
+      o: bind 
+
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt
