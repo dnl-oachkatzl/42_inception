@@ -3,20 +3,32 @@ services:
     image: mariadb
     volumes:
       - db_vol:/var/lib/mysql
+    networks:
+      - inception_net
     environment:
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      # MARIADB_ROOT_PASSWORD: geheim
       MARIADB_PASSWORD_FILE: /run/secrets/db_password
+      # MARIADB_PASSWORD: geheim
+      MARIADB_USER: blog
+      MARIADB_DATABASE: blog
     secrets:
       - db_root_password
       - db_password
 
   wordpress:
     image: wordpress
+    networks:
+      - inception_net
     ports:
-      - 4443:443
+      # - 4443:443
+      - 8080:80
     environment:
       WORDPRESS_DB_HOST: mariadb
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+      # WORDPRESS_DB_PASSWORD: geheim
+      WORDPRESS_DB_USER: blog
+      WORDPRESS_DB_NAME: blog
     secrets:
       - db_password
     
@@ -34,6 +46,7 @@ networks:
 
 volumes:
   db_vol:
+    name: inception_database
     driver: local
     driver_opts:
       type: none
