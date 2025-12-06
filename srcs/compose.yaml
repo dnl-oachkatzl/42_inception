@@ -1,6 +1,5 @@
 services:
   mariadb:
-    # image: mariadb
     build: ./requirements/mariadb/
     volumes:
       - db_vol:/var/lib/mysql
@@ -8,9 +7,7 @@ services:
       - inception_net
     environment:
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      # MARIADB_ROOT_PASSWORD: geheim
       MARIADB_PASSWORD_FILE: /run/secrets/db_password
-      # MARIADB_PASSWORD: geheim
       MARIADB_USER: blog
       MARIADB_DATABASE: wordpress
     secrets:

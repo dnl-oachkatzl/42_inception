@@ -8,7 +8,7 @@ MARIADB_PASSWORD=$(cat "${MARIADB_PASSWORD_FILE}")
 mkdir -p /run/mysqld
 chown -R mysql:mysql /run/mysqld
 
-if [ ! -d "$DATA_PATH/mysql" ]; then
+if [ ! -f "$DATA_PATH/mysql/initialized" ]; then
   echo "initializing MariaDB for the first time"
   mysql_install_db --user=mysql --datadir="$DATA_PATH"
   mysqld --user=mysql --bootstrap <<EOF
@@ -19,6 +19,10 @@ CREATE USER '${MARIADB_USER}'@'%' IDENTIFIED BY '${MARIADB_PASSWORD}';
 GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE}\`.* TO '${MARIADB_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF
+  touch $DATA_PATH/mysql/initialized
+  echo "initialization complete"
+else
+  echo "database has already been initialized"
 fi
 
 exec "$@"
