@@ -4,7 +4,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 up:
-	docker compose -f ./srcs/compose.yaml up --build
+	docker compose -f ./srcs/compose.yaml up -d --build
 
 down:
 	docker compose -f ./srcs/compose.yaml down

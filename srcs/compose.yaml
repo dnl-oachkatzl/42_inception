@@ -1,6 +1,7 @@
 services:
-  # mariadb:
+  # my_mariadb:
   #   build: ./requirements/mariadb/
+  #   image: my_mariadb
   #   volumes:
   #     - db_vol:/var/lib/mysql
   #   networks:
@@ -22,7 +23,7 @@ services:
   #     # - 4443:443
   #     - 8080:80
   #   environment:
-  #     WORDPRESS_DB_HOST: mariadb
+  #     WORDPRESS_DB_HOST: my_mariadb
   #     # WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
   #     WORDPRESS_DB_PASSWORD: PLACEHOLDER
   #     WORDPRESS_DB_USER: $USER_NAME
@@ -30,12 +31,14 @@ services:
   #   secrets:
   #     - db_password
     
-  nginx:
+  my_nginx:
+    # container_name: my_nginx
     build: ./requirements/nginx
+    image: my_nginx
     networks:
       - inception_net
     ports:
-      - 80:80
+      # - 80:80
       - 443:443
 
 networks:
