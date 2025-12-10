@@ -2,7 +2,7 @@ FROM debian:bookworm
 
 RUN apt update && \
     apt install -y mariadb-server mariadb-client && \
-    apt clena && \
+    apt clean && \
     rm -rf /var/lib/apt/lists/*
 
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
