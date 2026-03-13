@@ -40,6 +40,7 @@ services:
 networks:
   inception_net:
     driver: bridge
+    name: inception-net
 
 volumes:
   db_vol:

@@ -17,6 +17,7 @@ set-up:
 					-days 365 \
 					-subj "/CN=localhost"
 	@mkdir -p $(HOME)/data/database
+	@mkdir -p secrets
 	@touch ./secrets/db_password.txt ./secrets/db_root_password.txt ./secrets/wp_password.txt
 	@echo "created sll_certificates, directories for docker 'bind-mount-volumes' (in $(HOME)/data/) and secret-files (in ./secrets/)"
 	@echo ${RED}"The secrets still need to be set."${NC}
