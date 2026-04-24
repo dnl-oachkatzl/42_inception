@@ -1,27 +1,63 @@
+TARGET = inception
+
 CERT_PATH=./srcs/requirements/nginx/tools/certs
+
+DATA_PATH 	= /home/$(shell whoami)/data
+DB_PATH 		= $(DATA_PATH)/mariadb
+WP_PATH 		= $(DATA_PATH)/wordpress
+
+COMPOSE = docker compose -f ./srcs/compose.yaml
 
 RED='\033[0;31m'
 NC='\033[0m'
 
-up:
-	docker compose -f ./srcs/compose.yaml up --build
+all: $(TARGET)
+
+$(TARGET): up 
+
+setup:
+	@if [ ! -d $(DB_PATH) ] || [ ! -d $(WP_PATH) ]; then \
+		mkdir -p $(DB_PATH); \
+		mkdir -p $(WP_PATH); \
+		echo "created directories for docker 'bind-mount-volumes' (in $(HOME)/data/)"; \
+	fi
+	@if [ ! -d $(DB_PATH) ] || [ ! -d $(WP_PATH) ]; then \
+		mkdir -p ./secrets; \
+		touch ./secrets/db_password.txt ./secrets/db_root_password.txt ./secrets/wp_password.txt; \
+		echo "created empty secret-files (in ./secrets/)"; \
+		echo ${RED}"The secrets still need to be set."${NC}; \
+	fi
+	@if [ ! -f ./srcs/.env ]; then \
+		echo ${RED}"mv .env.example to .env and enter proper values."${NC}; \
+	fi
+	@if [ ! -f $(CERT_PATH)/server.key ] || [ ! -f $(CERT_PATH)/server.crt ]; then \
+		echo "creating certificate:"; \
+		mkdir -p $(CERT_PATH); \
+		openssl req -x509 -quiet -newkey rsa:4096 -sha256 -nodes \
+						-keyout $(CERT_PATH)/server.key \
+						-out $(CERT_PATH)/server.crt \
+						-days 365 \
+						-subj "/CN=localhost"; \
+		echo "created sll_certificates"; \
+	fi
+
+up: setup
+	@$(COMPOSE) up -d --build
+	# $(COMPOSE) up -d
 
 down:
-	docker compose -f ./srcs/compose.yaml down
+	@$(COMPOSE) down
 
-set-up:
-	@mkdir -p $(CERT_PATH)
-	@openssl req -x509 -quiet -newkey rsa:4096 -sha256 -nodes \
-					-keyout $(CERT_PATH)/server.key \
-					-out $(CERT_PATH)/server.crt \
-					-days 365 \
-					-subj "/CN=localhost"
-	@mkdir -p $(HOME)/data/database
-	@mkdir -p secrets
-	@touch ./secrets/db_password.txt ./secrets/db_root_password.txt ./secrets/wp_password.txt
-	@echo "created sll_certificates, directories for docker 'bind-mount-volumes' (in $(HOME)/data/) and secret-files (in ./secrets/)"
-	@echo ${RED}"The secrets still need to be set."${NC}
-	@echo ${RED}"mv .env.example to .env and enter proper values."${NC}
+clean: down
+	@echo "removing volumes, images, cert-files, and secrets"
+	@$(COMPOSE) down -v --rmi all
+	@rm -rf $(CERT_PATH) $(./secrets/)
 
-deconst_vol:
-	rm -r $(HOME)/data/database
+fclean: clean
+	@echo "removing all data"
+	@sudo rm -rf $(DATA_PATH)
+	@docker system prune -af
+
+re: fclean all
+
+.PHONY: all setup up down clean fclean re
