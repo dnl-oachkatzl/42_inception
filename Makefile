@@ -54,19 +54,22 @@ up: setup
 	# $(COMPOSE) up -d
 
 down:
-	@$(COMPOSE) down
+	-@$(COMPOSE) down > /dev/null 2<&1
 
 clean: down
-	@echo "removing volumes and images"
-	@$(COMPOSE) down -v --rmi all
+	@echo "removing images and containers"
+	-@$(COMPOSE) down --rmi all > /dev/null 2<&1
+
 
 fclean: clean
-	@echo "removing all data, including secrets, cert-files and environment"
-	@rm ./srcs/.env
-	@rm ./secrets/*
-	@rm -rf $(CERT_PATH)
-	@sudo rm -rf $(DATA_PATH)
-	@docker system prune -af
+	@echo "removing all volumes and all data, including secrets, cert-files and environment"
+	-@rm -f ./srcs/.env
+	-@rm -rf ./secrets/
+	-@rm -rf $(CERT_PATH)
+	-@sudo rm -rf $(DATA_PATH)
+	@$(COMPOSE) down -v > /dev/null 2<&1
+	@docker system prune -af > /dev/null 2<&1
+
 
 re: fclean all
 
