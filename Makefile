@@ -21,9 +21,9 @@ setup:
 		mkdir -p $(WP_PATH); \
 		echo "created directories for docker 'bind-mount-volumes' (in $(HOME)/data/)"; \
 	fi
-	@if [ ! -f ./secrets/db_password.txt ] || [ ! -f ./secrets/db_root_password.txt ] || [ ! -f ./secrets/wp_password.txt ]; then \
+	@if [ ! -f ./secrets/db_password.txt ] || [ ! -f ./secrets/db_root_password.txt ] || [ ! -f ./secrets/wp_password.txt ] || [ ! -f ./secrets/wp_admin_password.txt ]; then \
 		mkdir -p ./secrets; \
-		touch ./secrets/db_password.txt ./secrets/db_root_password.txt ./secrets/wp_password.txt; \
+		touch ./secrets/db_password.txt ./secrets/db_root_password.txt ./secrets/wp_password.txt ./secrets/wp_admin_password.txt; \
 		echo "created empty secret-files (in ./secrets/)"; \
 		echo ${RED}"The secrets still need to be set."${NC}; \
 	fi
@@ -42,7 +42,7 @@ setup:
 	fi
 
 up: setup
-	@if [ ! -s ./secrets/db_password.txt ] || [ ! -s ./secrets/db_root_password.txt ] || [ ! -s ./secrets/wp_password.txt ]; then \
+	@if [ ! -s ./secrets/db_password.txt ] || [ ! -s ./secrets/db_root_password.txt ] || [ ! -s ./secrets/wp_password.txt ] || [ ! -s ./secrets/wp_admin_password.txt ]; then \
 		echo ${RED}"The secrets still need to be set."${NC}; \
 		exit 1; \
 	fi

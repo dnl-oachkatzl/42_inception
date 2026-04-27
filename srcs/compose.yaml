@@ -1,19 +1,20 @@
 services:
-  my_mariadb:
-    build: ./requirements/mariadb/
-    image: my_mariadb:inception
-    volumes:
-      - db_vol:/var/lib/mysql
-    networks:
-      - inception_net
-    environment:
-      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MARIADB_PASSWORD_FILE: /run/secrets/db_password
-      MARIADB_USER: $USER_NAME
-      MARIADB_DATABASE: $DATABASE_NAME
-    secrets:
-      - db_root_password
-      - db_password
+  # my_mariadb:
+  #   build: ./requirements/mariadb/
+  #   image: my_mariadb:inception
+  #   volumes:
+  #     - db_vol:/var/lib/mysql
+  #   networks:
+  #     - inception_net
+  #   environment:
+  #     MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+  #     MARIADB_PASSWORD_FILE: /run/secrets/db_password
+  #     MARIADB_USER: $USER_NAME
+  #     MARIADB_DATABASE: $DATABASE_NAME
+  #   secrets:
+  #     - db_root_password
+  #     - db_password
+  #   restart: unless-stopped
 
   my_wordpress:
     build: ./requirements/wordpress/
@@ -27,15 +28,20 @@ services:
       WORDPRESS_DB_NAME: $DATABASE_NAME
     secrets:
       - db_password
+      - wp_user_password
+      - wp_admin_password
+    restart: unless-stopped
     
   my_nginx:
-    build: ./requirements/nginx
+    build: ./requirements/nginx/
     image: my_nginx:inception
+    volumes:
+      - wp_vol:/var/www/wordpress
     networks:
       - inception_net
     ports:
-      # - 80:80
       - 443:443
+    restart: unless-stopped
 
 networks:
   inception_net:
@@ -45,16 +51,25 @@ networks:
 volumes:
   db_vol:
     name: inception_database
-    # driver: local
-    # driver_opts:
-    #   type: none
-    #   device: ${VOLUME_PATH}/database
-    #   o: bind 
+    driver: local
+    driver_opts:
+      type: none
+      device: ${VOLUMES_PATH}/mariadb
+      o: bind 
   wp_vol:
     name: wordpress_database
+    driver: local
+    driver_opts:
+      type: none
+      device: ${VOLUMES_PATH}/wordpress
+      o: bind 
 
 secrets:
-  db_root_password:
-    file: ../secrets/db_root_password.txt
   db_password:
     file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  wp_user_password:
+    file: ../secrets/wp_password.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
