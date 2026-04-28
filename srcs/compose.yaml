@@ -19,6 +19,8 @@ services:
   my_wordpress:
     build: ./requirements/wordpress/
     image: my_wordpress:inception
+    volumes:
+      - wp_vol:/var/www/wordpress
     networks:
       - inception_net
     environment:
@@ -42,6 +44,8 @@ services:
     ports:
       - 443:443
     restart: unless-stopped
+    depends_on:
+      - my_wordpress
 
 networks:
   inception_net:

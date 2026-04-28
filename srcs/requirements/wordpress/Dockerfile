@@ -3,7 +3,8 @@
 FROM debian:bookworm
 
 RUN apt update && \
-    apt install -y  php \
+    apt install -y \
+                    php \
                     php-cli \
                     php-fpm \
                     php-mysql \
@@ -19,6 +20,9 @@ RUN apt update && \
 RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x /usr/local/bin/wp
     # mv wp-cli.phar /usr/local/bin/wp
+
+# RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+# RUN chmod +x /usr/local/bin/wp
 
 # php-fpm config : listening to port 9000
 COPY tools/www.conf /etc/php/8.2/fpm/pool.d/www.conf
