@@ -6,7 +6,7 @@ DATA_PATH 	= /home/$(shell whoami)/data
 DB_PATH 		= $(DATA_PATH)/mariadb
 WP_PATH 		= $(DATA_PATH)/wordpress
 
-COMPOSE = docker compose -f ./srcs/compose.yaml
+COMPOSE = docker compose -f ./srcs/docker-compose.yml
 
 RED='\033[0;31m'
 NC='\033[0m'
