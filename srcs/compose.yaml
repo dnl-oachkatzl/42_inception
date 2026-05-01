@@ -17,38 +17,40 @@ services:
       - db_password
     restart: unless-stopped
 
-  # my_wordpress:
-  #   build: ./requirements/wordpress/
-  #   image: my_wordpress:inception
-  #   volumes:
-  #     - wp_vol:/var/www/wordpress
-  #   networks:
-  #     - inception_net
-  #   environment:
-  #     WORDPRESS_DB_HOST: my_mariadb
-  #     WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
-  #     WORDPRESS_DB_USER: $MARIADB_USER
-  #     WORDPRESS_DB_NAME: $MARIADB_DATABASE
-  #   secrets:
-  #     - db_password
-  #     - wp_user_password
-  #     - wp_admin_password
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - my_mariadb
-  #
-  # my_nginx:
-  #   build: ./requirements/nginx/
-  #   image: my_nginx:inception
-  #   volumes:
-  #     - wp_vol:/var/www/wordpress
-  #   networks:
-  #     - inception_net
-  #   ports:
-  #     - 443:443
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - my_wordpress
+  my_wordpress:
+    build: ./requirements/wordpress/
+    image: my_wordpress:inception
+    volumes:
+      - wp_vol:/var/www/wordpress
+    networks:
+      - inception_net
+    environment:
+      WP_DB_HOST: my_mariadb
+      WP_DB_USER: $MARIADB_USER
+      WP_DB_NAME: $MARIADB_DATABASE
+      WP_TITLE: $WORDPRESS_TITLE
+      WP_ADMIN: $WORDPRESS_ADMIN_NAME
+      WP_USER: $WORDPRESS_USER_NAME
+    secrets:
+      - db_password
+      - wp_user_password
+      - wp_admin_password
+    restart: unless-stopped
+    depends_on:
+      - my_mariadb
+
+  my_nginx:
+    build: ./requirements/nginx/
+    image: my_nginx:inception
+    volumes:
+      - wp_vol:/var/www/wordpress
+    networks:
+      - inception_net
+    ports:
+      - 443:443
+    restart: unless-stopped
+    depends_on:
+      - my_wordpress
 
 networks:
   inception_net:
