@@ -95,6 +95,7 @@ main() {
 	exec mariadbd \
 		--user=mysql \
 		--datadir="$DATA_PATH" \
+    		--bind-address=0.0.0.0 \
 		--console
 }
 

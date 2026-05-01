@@ -25,12 +25,15 @@ services:
     networks:
       - inception_net
     environment:
+      DOMAIN_NAME: $DOMAIN_NAME
       WP_DB_HOST: my_mariadb
       WP_DB_USER: $MARIADB_USER
       WP_DB_NAME: $MARIADB_DATABASE
       WP_TITLE: $WORDPRESS_TITLE
       WP_ADMIN: $WORDPRESS_ADMIN_NAME
+      WP_ADMIN_EMAIL: $WORDPRESS_ADMIN_EMAIL
       WP_USER: $WORDPRESS_USER_NAME
+      WP_USER_EMAIL: $WORDPRESS_USER_EMAIL
     secrets:
       - db_password
       - wp_user_password
@@ -48,6 +51,8 @@ services:
       - inception_net
     ports:
       - 443:443
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
     restart: unless-stopped
     depends_on:
       - my_wordpress
