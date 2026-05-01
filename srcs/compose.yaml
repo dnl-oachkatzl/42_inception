@@ -1,3 +1,4 @@
+
 services:
   my_mariadb:
     build: ./requirements/mariadb/
@@ -26,8 +27,8 @@ services:
   #   environment:
   #     WORDPRESS_DB_HOST: my_mariadb
   #     WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
-  #     WORDPRESS_DB_USER: $USER_NAME
-  #     WORDPRESS_DB_NAME: $DATABASE_NAME
+  #     WORDPRESS_DB_USER: $MARIADB_USER
+  #     WORDPRESS_DB_NAME: $MARIADB_DATABASE
   #   secrets:
   #     - db_password
   #     - wp_user_password
