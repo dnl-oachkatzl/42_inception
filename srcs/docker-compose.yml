@@ -3,6 +3,7 @@ services:
   my_mariadb:
     build: ./requirements/mariadb/
     image: my_mariadb:inception
+    container_name: my_mariadb
     volumes:
       - db_vol:/var/lib/mysql
     networks:
@@ -18,6 +19,7 @@ services:
   my_wordpress:
     build: ./requirements/wordpress/
     image: my_wordpress:inception
+    container_name: my_wordpress
     volumes:
       - wp_vol:/var/www/wordpress
     networks:
@@ -43,6 +45,7 @@ services:
   my_nginx:
     build: ./requirements/nginx/
     image: my_nginx:inception
+    container_name: my_nginx
     volumes:
       - wp_vol:/var/www/wordpress
     networks:
