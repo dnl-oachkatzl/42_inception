@@ -19,18 +19,14 @@ RUN apt update && \
 
 RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x /usr/local/bin/wp
-    # mv wp-cli.phar /usr/local/bin/wp
-
-# RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-# RUN chmod +x /usr/local/bin/wp
 
 # php-fpm config : listening to port 9000
 COPY tools/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
-COPY tools/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 9000
 
-CMD ["entrypoint.sh"]
+CMD ["docker-entrypoint.sh"]
 

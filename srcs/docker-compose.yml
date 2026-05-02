@@ -8,8 +8,6 @@ services:
     networks:
       - inception_net
     environment:
-      # MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      # MARIADB_PASSWORD_FILE: /run/secrets/db_password
       MARIADB_USER: $MARIADB_USER
       MARIADB_DATABASE: $MARIADB_DATABASE
     secrets:
