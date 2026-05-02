@@ -27,7 +27,7 @@ Internet
 
 ### Docker in this project
 
-Each service (NGINX, WordPress+php-fpm, MariaDB) lives in its own container built from a custom Dockerfile based on Debian Bullseye. A `docker-compose.yml` file declares all services, volumes, secrets, and the network. The `Makefile` at the root automates building and running the whole stack.
+Each service (NGINX, WordPress+php-fpm, MariaDB) lives in its own container built from a custom Dockerfile based on Debian Bookworm. A `docker-compose.yml` file declares all services, volumes, secrets, and the network. The `Makefile` at the root automates building and running the whole stack.
 
 ### Virtual Machines vs Docker
 
