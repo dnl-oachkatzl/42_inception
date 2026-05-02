@@ -24,7 +24,9 @@ RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh
 COPY tools/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
 COPY tools/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY tools/healthcheck.sh /usr/local/bin/healthcheck.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/healthcheck.sh
 
 EXPOSE 9000
 
